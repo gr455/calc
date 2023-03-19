@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
       - name: calc
-        image: calc:latest
+        image: ruturajmohite/calc:latest
