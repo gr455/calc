@@ -1,18 +1,22 @@
 import math
+import log
 
 class ImaginaryValueException(Exception):
 	"Thrown when result of a mathematical computation is not purely real"
 	def __init__(self, message="The result of this mathematical computation is not purely real"):
+		self.__name__ = "ImaginaryValueException"
 		super().__init__(message)
 
 class OutOfDomainException(Exception):
 	"Thrown when input value is outside the function domain"
 	def __init__(self, message="The input value is outside function domain"):
+		self.__name__ = "OutOfDomainException"
 		super().__init__(message)
 
-class InvalidOperation(Exception):
+class InvalidOperationException(Exception):
 	"Thrown when an invalid input is given on the calculator menu"
-	pass
+	def __init__(self):
+		self.__name__ = "InvalidOperationException"
 
 def sqrt(num):
 	if  num < 0:
@@ -36,8 +40,10 @@ def poww(num, exp):
 	return num ** exp
 
 ops = [sqrt, fact, natlog, poww]
+opnames = ["SquareRoot", "Factorial", "NaturalLog", "Power"]
 
 def main():
+	logger = log.Logger(mode="FILE", filepath="./log.log")
 	menuString = """
 		(1) Square Root
 		(2) Factorial
@@ -48,16 +54,22 @@ def main():
 
 	choice = int(input())
 
-	if not (choice > 0 and choice < 5): raise InvalidOperation
+	try:
+		if not (choice > 0 and choice < 5): raise InvalidOperationException
 
-	num = input("Num: ")
+		num = input("Num: ")
 
-	if choice == 4:
-		exp = input("Exp: ")
+		logger.info(opnames[choice - 1])
 
-		print(poww(float(num), float(exp)))
+		if choice == 4:
+			exp = input("Exp: ")
 
-	else: print(ops[choice - 1](float(num)))
+			print(poww(float(num), float(exp)))
+
+		else: print(ops[choice - 1](float(num)))
+	except Exception as e:
+		print(e)
+		logger.err(e.__name__)
 
 if __name__ == '__main__':
 	while True: main()
