@@ -1,6 +1,8 @@
 import math
 import log
 
+# change
+
 class ImaginaryValueException(Exception):
 	"Thrown when result of a mathematical computation is not purely real"
 	def __init__(self, message="The result of this mathematical computation is not purely real"):
